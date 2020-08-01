@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Homework</title>
+    <style>
+        * {
+            font-family: 微軟正黑體;
+            font-size: 20px;
+            margin: 0px;
+            padding: 0px;
+            background-color: #FFFFAA;
+        }
+
+        .t2 a:link {
+            color: slateblue;
+            text-decoration: none;
+        }
+
+        .t2 a:visited {
+            color: purple;
+            text-decoration: none;
+        }
+
+        .t2 a:hover {
+            color: red;
+        }
+
+        .t2 a:active {
+            color: sandybrown;
+            text-decoration: underline;
+        }
+
+        #board {
+            border: 2px solid #000000;
+            background-color: #FFE6D9;
+            text-align: center;
+            font-size: 500px;
+            margin-top: 100px;
+            margin-left: 80px;
+            width: 150px;
+            height: 300px;
+            float: left;
+            position: fixed;
+        }
+
+        .t1 {
+            border: 2px solid #FF5809;
+            margin-left: 400px;
+            margin-top: 30px;
+            background-color: #D2E9FF;
+        }
+
+        .ta1 {
+            border: 2px solid #000000;
+            width: 450px;
+            text-align: center;
+            font-size: xx-large;
+            margin-top: 60px;
+            margin-bottom: 30px;
+            background-color: #D2E9FF;
+        }
+
+        .d1 {
+            border: 1px solid #FF5809;
+            text-align: center;
+            padding: 10px;
+            background-color: #D2E9FF;
+        }
+
+        .d1:hover {
+            background-color: #DFFFDF;
+        }
+
+        .d1:active {
+            background-color: aqua;
+        }
+
+        fieldset {
+            width: 700px;
+            margin-top: 50px;
+            margin-left: 450px;
+            padding: 16px;
+            border: 2px solid #000000;
+            border-radius: 15px;
+            text-align: left;
+        }
+
+        .st2 {
+            text-align: center;
+            width: 600px;
+        }
+
+        .divh1 {
+            width: 450px;
+            border: 2px solid #000000;
+            font-size: 30px;
+            margin-top: 300px;
+            margin-left: 600px;
+            text-align: center;
+            background-color: #D2E9FF;
+        }
+
+        .grayp {
+            color: gray;
+            font-size: 16px;
+        }
+
+        .divpattern {
+            margin-top: 300px;
+            margin-left: 450px;
+            width: 680px;
+        }
+
+        .heading1 {
+            font-size: 30px;
+            text-align: center;
+            color: #3C3C3C;
+            padding: 24px;
+        }
+
+        img {
+            cursor: pointer;
+        }
+
+        #p {
+            text-align: center;
+            color: #FF2D2D;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <table class="t2" id="board">
+        <tr>
+            <td class="d2"><a href="#九九乘法表">九九乘法表</a></td>
+        </tr>
+        <tr>
+            <td class="d2"><a href="#formcheck">form check</a></td>
+        </tr>
+        <tr>
+            <td class="d2"><a href="#評分表">評分表</a></td>
+        </tr>
+    </table>
+    <script>
+        document.write("<table class=t1><caption><h1 class=ta1 id=九九乘法表>九九乘法表");
+        for (var x = 1; x < 10; x++) {
+            document.write("<td class=d1>");
+            for (var y = 1; y < 10; y++) {
+                document.write(x + "*" + y + "=" + x * y + "<br>");
+            }
+            document.write("</td>");
+        }
+        document.write("</table>");
+
+    </script>
+    <div>
+        <h1 class="divh1" id="formcheck">form check</h1>
+    </div>
+    <form action="#" method="get" enctype="multipart/form-data">
+        <fieldset>
+            <legend>form ckeck</legend>
+            <div>
+                姓名: <input type="text" id="account" name="account" placeholder="請輸入姓名" autofocus autocomplete="off"
+                    onblur="checkName()">
+                <span id=account_span></span>
+                <p class="grayp">(1.不可空白 2.至少兩個字以上 3.必須全部為中文字)</p>
+            </div><br>
+            <hr><br>
+            <div>
+                密碼: <input type="password" id="pwd" name="pwd" placeholder="請輸入密碼" onblur="checkPwd()">
+                <span id=pwd_span></span>
+                <p class="grayp">(1.不可空白 2.至少6個字且必須包含英文字母、數字、特殊字元!@#$%^&*)</p>
+            </div><br>
+            <hr><br>
+            <div>
+                日期: <input type="text" id="date" name="date" placeholder="ex:2020/7/26" maxlength="10"
+                    onblur="checkDate()" autofocus autocomplete="off">
+                <span id=date_span></span>
+                <p class="grayp">格式:西元年/月/日 yyyy/mm/dd</p>
+            </div><br>
+            <hr><br>
+            <div class="st2">
+                <input type="submit" value="送出">
+                <input type="reset" value="清除">
+            </div>
+        </fieldset>
+    </form>
+
+    <script>
+        function checkName() {
+            let theAccObj = document.getElementById("account");
+            let theAccObjVal = theAccObj.value;
+            let theAccObjValLen = theAccObjVal.length;
+            let re = /^[\u4e00-\u9fa5]{2,}$/;
+            if (theAccObjVal == "") {
+                document.getElementById("account_span").innerHTML = "姓名不能為空";
+            }
+            else if (theAccObjValLen < 2) {
+                document.getElementById("account_span").innerHTML = "姓名至少兩個字";
+            }
+            else if (!re.test(theAccObjVal)) {
+                document.getElementById("account_span").innerHTML = "姓名必須為中文";
+            }
+            else if (re.test(theAccObjVal) && theAccObjValLen >= 2) {
+                document.getElementById("account_span").innerHTML = "格式正確";
+            }
+            else {
+                document.getElementById("account_span").innerHTML = "格式錯誤";
+            }
+        }
+        function checkPwd() {
+            let thePwdObj = document.getElementById("pwd");
+            let thePwdObjVal = thePwdObj.value;
+            let thePwdObjValLen = thePwdObjVal.length;
+            //https://www.w3resource.com/javascript/form/password-validation.php
+            let pwdCheck = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,}$/;
+
+            if (thePwdObjVal == "")
+                document.getElementById("pwd_span").innerHTML = "密碼不能為空";
+            else if (thePwdObjValLen < 6) {
+                document.getElementById("pwd_span").innerHTML = "密碼至少6個字元";
+            }
+            else if (pwdCheck.test(thePwdObjVal)) {
+                document.getElementById("pwd_span").innerHTML = "密碼正確";
+            }
+            else {
+                document.getElementById("pwd_span").innerHTML = "密碼錯誤";
+            }
+        }
+        function checkDate() {
+
+            let theDatObj = document.getElementById("date");
+            let theDatObjVal = theDatObj.value;
+            if (theDatObjVal == null || theDatObjVal == "" || theDatObjVal >= "a" || theDatObjVal <= "z") {
+                document.getElementById("date_span").innerText = "日期不能為空且為數字";
+                return; //加個return在這裡，程式就不會再繼續往後走。直接離開checkDate()...
+            }
+
+            let checkpattern = true;
+            // First check for the pattern
+            if (/^\d{4}\/\d{1,2}\/\d{1,2}\$/.test(theDatObj))
+                checkpattern = false;
+
+            // Parse the date parts to integers
+            var parts = theDatObjVal.split("/");
+            var year = parseInt(parts[0], 10);
+            var month = parseInt(parts[1], 10);
+            var day = parseInt(parts[2], 10);
+            console.log(parts);
+
+            var monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+            // Adjust for leap years
+            if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0))
+                monthLength[1] = 29;
+
+            // Check the range of the day
+            a = day > 0 && day <= monthLength[month - 1];
+
+            // Check the ranges of month and year
+            if (year < 1000 || year > 3000 || month == 0 || month > 12 || parts[1].length != 2 || parts[2].length != 2)
+                a = false;
+
+            if (a) {
+                document.getElementById("date_span").innerText = "格式正確";
+            }
+            else {
+                document.getElementById("date_span").innerText = "請輸入 yyyy/mm/dd 格式或是該月份無此日期";
+            }
+        };
+    </script>
+    <div class=divpattern id=star_div>
+        <h1 class="heading1" id="評分表">評分表</h1>
+        <img id="idimg" src="Images/star.gif" />
+        <img id="idimg2" src="Images/star.gif" />
+        <img id="idimg3" src="Images/star.gif" />
+        <img id="idimg4" src="Images/star.gif" />
+        <img id="idimg5" src="Images/star.gif" />
+        <p id="p">請評分...</p>
+    </div>
+
+    <script>
+        document.querySelector("#idimg").onmouseover = mouseover;
+        document.querySelector("#idimg").onmouseout = mouseout;
+        document.querySelector("#idimg").onclick = click;
+        document.querySelector("#idimg2").onmouseover = mouseover2;
+        document.querySelector("#idimg2").onmouseout = mouseout2;
+        document.querySelector("#idimg2").onclick = click2;
+        document.querySelector("#idimg3").onmouseover = mouseover3;
+        document.querySelector("#idimg3").onmouseout = mouseout3;
+        document.querySelector("#idimg3").onclick = click3;
+        document.querySelector("#idimg4").onmouseover = mouseover4;
+        document.querySelector("#idimg4").onmouseout = mouseout4;
+        document.querySelector("#idimg4").onclick = click4;
+        document.querySelector("#idimg5").onmouseover = mouseover5;
+        document.querySelector("#idimg5").onmouseout = mouseout5;
+        document.querySelector("#idimg5").onclick = click5;
+
+
+
+        function mouseover() {
+            document.querySelector("#idimg").src = "Images/chngstar.gif";
+            document.querySelector("#idimg2").src = "Images/star.gif";
+            document.querySelector("#idimg3").src = "Images/star.gif";
+            document.querySelector("#idimg4").src = "Images/star.gif";
+            document.querySelector("#idimg5").src = "Images/star.gif";
+            document.getElementById("p").innerHTML = "打分中...一顆星!"
+        }
+        function mouseout() {
+            document.querySelector("#idimg").src = "Images/star.gif";
+            document.querySelector("#idimg2").src = "Images/star.gif";
+            document.querySelector("#idimg3").src = "Images/star.gif";
+            document.querySelector("#idimg4").src = "Images/star.gif";
+            document.querySelector("#idimg5").src = "Images/star.gif";
+            document.getElementById("p").innerHTML = "請評分..."
+        }
+        function click() {
+            document.querySelector("#idimg").src = "Images/chngstar.gif";
+            document.querySelector("#idimg").addEventListener("mouseout", function () {
+                document.querySelector("#idimg").src = "Images/chngstar.gif";
+                document.getElementById("p").innerHTML = "一顆星! 再接再厲";
+            })
+        }
+        function mouseover2() {
+            document.querySelector("#idimg").src = "Images/chngstar.gif";
+            document.querySelector("#idimg2").src = "Images/chngstar.gif";
+            document.querySelector("#idimg3").src = "Images/star.gif";
+            document.querySelector("#idimg4").src = "Images/star.gif";
+            document.querySelector("#idimg5").src = "Images/star.gif";
+            document.getElementById("p").innerHTML = "打分中...兩顆星!!"
+        }
+        function mouseout2() {
+            document.querySelector("#idimg").src = "Images/star.gif";
+            document.querySelector("#idimg2").src = "Images/star.gif";
+            document.querySelector("#idimg3").src = "Images/star.gif";
+            document.querySelector("#idimg4").src = "Images/star.gif";
+            document.querySelector("#idimg5").src = "Images/star.gif";
+            document.getElementById("p").innerHTML = "請評分..."
+        }
+        function click2() {
+            document.querySelector("#idimg").src = "Images/chngstar.gif";
+            document.querySelector("#idimg2").src = "Images/chngstar.gif";
+            document.querySelector("#idimg2").addEventListener("mouseout", function () {
+                document.querySelector("#idimg").src = "Images/chngstar.gif";
+                document.querySelector("#idimg2").src = "Images/chngstar.gif";
+                document.getElementById("p").innerHTML = "兩顆星!! 加油";
+            })
+        }
+        function mouseover3() {
+            document.querySelector("#idimg").src = "Images/chngstar.gif";
+            document.querySelector("#idimg2").src = "Images/chngstar.gif";
+            document.querySelector("#idimg3").src = "Images/chngstar.gif";
+            document.querySelector("#idimg4").src = "Images/star.gif";
+            document.querySelector("#idimg5").src = "Images/star.gif";
+            document.getElementById("p").innerHTML = "打分中...三顆星!!!"
+        }
+        function mouseout3() {
+            document.querySelector("#idimg").src = "Images/star.gif";
+            document.querySelector("#idimg2").src = "Images/star.gif";
+            document.querySelector("#idimg3").src = "Images/star.gif";
+            document.querySelector("#idimg4").src = "Images/star.gif";
+            document.querySelector("#idimg5").src = "Images/star.gif";
+            document.getElementById("p").innerHTML = "請評分..."
+        }
+        function click3() {
+            document.querySelector("#idimg").src = "Images/chngstar.gif";
+            document.querySelector("#idimg2").src = "Images/chngstar.gif";
+            document.querySelector("#idimg3").src = "Images/chngstar.gif";
+            document.querySelector("#idimg3").addEventListener("mouseout", function () {
+                document.querySelector("#idimg").src = "Images/chngstar.gif";
+                document.querySelector("#idimg2").src = "Images/chngstar.gif";
+                document.querySelector("#idimg3").src = "Images/chngstar.gif";
+                document.getElementById("p").innerHTML = "三顆星!!! 普普通通";
+            })
+        }
+        function mouseover4() {
+            document.querySelector("#idimg").src = "Images/chngstar.gif";
+            document.querySelector("#idimg2").src = "Images/chngstar.gif";
+            document.querySelector("#idimg3").src = "Images/chngstar.gif";
+            document.querySelector("#idimg4").src = "Images/chngstar.gif";
+            document.querySelector("#idimg5").src = "Images/star.gif";
+            document.getElementById("p").innerHTML = "打分中...四顆星!!!!"
+        }
+        function mouseout4() {
+            document.querySelector("#idimg").src = "Images/star.gif";
+            document.querySelector("#idimg2").src = "Images/star.gif";
+            document.querySelector("#idimg3").src = "Images/star.gif";
+            document.querySelector("#idimg4").src = "Images/star.gif";
+            document.querySelector("#idimg5").src = "Images/star.gif";
+            document.getElementById("p").innerHTML = "請評分..."
+        }
+        function click4() {
+            document.querySelector("#idimg").src = "Images/chngstar.gif";
+            document.querySelector("#idimg2").src = "Images/chngstar.gif";
+            document.querySelector("#idimg3").src = "Images/chngstar.gif";
+            document.querySelector("#idimg4").src = "Images/chngstar.gif";
+            document.querySelector("#idimg4").addEventListener("mouseout", function () {
+                document.querySelector("#idimg").src = "Images/chngstar.gif";
+                document.querySelector("#idimg2").src = "Images/chngstar.gif";
+                document.querySelector("#idimg3").src = "Images/chngstar.gif";
+                document.querySelector("#idimg4").src = "Images/chngstar.gif";
+                document.getElementById("p").innerHTML = "四顆星!!!! 不錯哦";
+            })
+        }
+        function mouseover5() {
+            document.querySelector("#idimg").src = "Images/chngstar.gif";
+            document.querySelector("#idimg2").src = "Images/chngstar.gif";
+            document.querySelector("#idimg3").src = "Images/chngstar.gif";
+            document.querySelector("#idimg4").src = "Images/chngstar.gif";
+            document.querySelector("#idimg5").src = "Images/chngstar.gif";
+            document.getElementById("p").innerHTML = "打分中...五顆星!!!!!"
+        }
+        function mouseout5() {
+            document.querySelector("#idimg").src = "Images/star.gif";
+            document.querySelector("#idimg2").src = "Images/star.gif";
+            document.querySelector("#idimg3").src = "Images/star.gif";
+            document.querySelector("#idimg4").src = "Images/star.gif";
+            document.querySelector("#idimg5").src = "Images/star.gif";
+            document.getElementById("p").innerHTML = "請評分..."
+        }
+        function click5() {
+            document.querySelector("#idimg").src = "Images/chngstar.gif";
+            document.querySelector("#idimg2").src = "Images/chngstar.gif";
+            document.querySelector("#idimg3").src = "Images/chngstar.gif";
+            document.querySelector("#idimg4").src = "Images/chngstar.gif";
+            document.querySelector("#idimg5").src = "Images/chngstar.gif";
+            document.querySelector("#idimg5").addEventListener("mouseout", function () {
+                document.querySelector("#idimg").src = "Images/chngstar.gif";
+                document.querySelector("#idimg2").src = "Images/chngstar.gif";
+                document.querySelector("#idimg3").src = "Images/chngstar.gif";
+                document.querySelector("#idimg4").src = "Images/chngstar.gif";
+                document.querySelector("#idimg5").src = "Images/chngstar.gif";
+                document.getElementById("p").innerHTML = "五顆星!!!!! 你好棒";
+            })
+        }
+    </script>
+    <br><br><br><br>
+</body>
+
+</html>
